@@ -207,6 +207,66 @@
         .pay-button:hover  { background: #1b5e20; }
         .pay-button:active { transform: scale(0.98); }
 
+        /* ===== POPUP ÉXITO (NUEVO) ===== */
+        .success-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .success-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .success-popup {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            max-width: 360px;
+            width: 85%;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .success-overlay.open .success-popup {
+            transform: translateY(0);
+        }
+        .success-popup .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+        .success-popup h3 {
+            color: #2e7d32;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .success-popup p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .success-close-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .success-close-btn:hover { background: #1b5e20; }
+
         /* ===== WHATSAPP FLOTANTE ===== */
         .wpp-btn {
             position: fixed;
@@ -348,7 +408,6 @@
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="pdu-topbar">
     <span>Tel: 1865</span>
     <a href="https://www.gub.uy" target="_blank">
@@ -356,7 +415,6 @@
     </a>
 </div>
 
-<!-- HEADER VERDE -->
 <header class="pdu-header">
     <div class="pdu-logo">
         <img src="Paysandu.png" alt="Paysandú" class="pdu-logo-img">
@@ -374,7 +432,6 @@
     <i class="fa-solid fa-magnifying-glass pdu-search-icon"></i>
 </header>
 
-<!-- NAVBAR -->
 <nav class="pdu-nav">
     <ul>
         <li><a href="#">Institucional <i class="fa-solid fa-chevron-down"></i></a></li>
@@ -385,7 +442,6 @@
     </ul>
 </nav>
 
-<!-- CONTENIDO PRINCIPAL -->
 <div class="main-container">
     <div class="card">
         <div class="card-title">
@@ -408,7 +464,7 @@
             </div>
             <div class="detail-item">
                 <span>Estado</span>
-                <strong style="color: #c62828;">PENDIENTE</strong>
+                <strong id="val-estado" style="color: #c62828;">PENDIENTE</strong>
             </div>
         </div>
 
@@ -422,16 +478,23 @@
             </div>
         </div>
 
-        <button class="pay-button">ABONAR LIQUIDACIÓN</button>
+        <button class="pay-button" id="payBtn">ABONAR LIQUIDACIÓN</button>
     </div>
 </div>
 
-<!-- BOTÓN WHATSAPP FLOTANTE -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-popup">
+        <div class="icon">✅</div>
+        <h3>Boleta abonada con éxito!</h3>
+        <p>Tu transacción ha sido procesada correctamente por el sistema de la Intendencia.</p>
+        <button class="success-close-btn" id="successCloseBtn">Entendido</button>
+    </div>
+</div>
+
 <div class="wpp-btn" id="wppBtn" title="Chatear por WhatsApp">
     <i class="fa-brands fa-whatsapp"></i>
 </div>
 
-<!-- POPUP WHATSAPP -->
 <div class="wpp-popup" id="wppPopup">
     <div class="wpp-popup-header">
         <div class="wpp-avatar">
@@ -480,6 +543,23 @@
     document.getElementById('val-interes').textContent    = fmt(interes);
     document.getElementById('val-total').textContent      = fmt(total);
 
+    /* ---- Popup Éxito de Pago (NUEVO) ---- */
+    const payBtn = document.getElementById('payBtn');
+    const successOverlay = document.getElementById('successOverlay');
+    const successCloseBtn = document.getElementById('successCloseBtn');
+    const valEstado = document.getElementById('val-estado');
+
+    payBtn.addEventListener('click', () => {
+        successOverlay.classList.add('open');
+    });
+
+    successCloseBtn.addEventListener('click', () => {
+        successOverlay.classList.remove('open');
+        // Cambia el estado visual a PAGADO tras cerrar el modal
+        valEstado.textContent = 'PAGADO';
+        valEstado.style.color = '#2e7d32';
+    });
+
     /* ---- WhatsApp popup ---- */
     const wppBtn   = document.getElementById('wppBtn');
     const wppPopup = document.getElementById('wppPopup');
@@ -506,4 +586,3 @@
 
 </body>
 </html>
-
