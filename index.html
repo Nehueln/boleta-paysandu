@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oficina Virtual - Intendencia de Paysandú</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        /* ===== TOPBAR ===== */
+        .pdu-topbar {
+            background: #1b1b1b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 24px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        .pdu-topbar a {
+            color: #ccc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .pdu-topbar a:hover { color: #a5d6a7; }
+
+        /* ===== HEADER VERDE ===== */
+        .pdu-header {
+            background: #3ca340;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .pdu-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .pdu-logo-box {
+            background: #1b5e20;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        .pdu-logo-box .pou {
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+        .pdu-logo-box .pou span { color: #a5d6a7; }
+        .pdu-city { color: white; }
+        .pdu-city .name { font-size: 15px; font-weight: 700; letter-spacing: 1px; }
+        .pdu-city .sub  { font-size: 9px; letter-spacing: 2px; color: #c8e6c9; }
+        .pdu-intendencia {
+            border-left: 1px solid #4caf50;
+            padding-left: 10px;
+            color: white;
+            font-size: 9px;
+            line-height: 1.5;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .pdu-search-icon {
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .pdu-search-icon:hover { color: #a5d6a7; }
+
+        /* ===== NAVBAR ===== */
+        .pdu-nav {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .pdu-nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+        .pdu-nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            color: #444;
+            font-size: 13px;
+            padding: 13px 14px;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            white-space: nowrap;
+        }
+        .pdu-nav ul li a:hover,
+        .pdu-nav ul li a.active {
+            color: #2e7d32;
+            border-bottom-color: #2e7d32;
+        }
+        .pdu-nav ul li a .fa-chevron-down { font-size: 9px; color: #aaa; }
+
+        /* ===== BODY ===== */
+        body { background: #f5f5f5; }
+
+        /* ===== MAIN ===== */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            padding: 50px 20px;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 490px;
+            border-radius: 10px;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+            padding: 38px 40px;
+            border-top: 6px solid #2e7d32;
+        }
+        .card-title {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .card-title h2 {
+            color: #2e7d32;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .card-title p {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* ===== GRID DE DATOS ===== */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            background: #f9fbe7;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #dcedc8;
+            margin-bottom: 26px;
+        }
+        .detail-item span {
+            display: block;
+            font-size: 10px;
+            color: #558b2f;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .detail-item strong {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* ===== TOTAL ===== */
+        .total-box {
+            text-align: center;
+            padding: 24px 20px;
+            border: 2px dashed #2e7d32;
+            border-radius: 8px;
+            margin-bottom: 26px;
+        }
+        .total-box .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .total-box .amount {
+            font-size: 40px;
+            font-weight: 700;
+            color: #2e7d32;
+            margin: 8px 0;
+        }
+        .total-box .breakdown {
+            font-size: 13px;
+            color: #888;
+        }
+        .total-box .breakdown strong { color: #555; }
+
+        /* ===== BOTÓN PAGO ===== */
+        .pay-button {
+            width: 100%;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: background 0.25s, transform 0.1s;
+        }
+        .pay-button:hover  { background: #1b5e20; }
+        .pay-button:active { transform: scale(0.98); }
+
+        /* ===== WHATSAPP FLOTANTE ===== */
+        .wpp-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(37,211,102,0.5);
+            z-index: 999;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .wpp-btn:hover { transform: scale(1.08); background: #1ebe5c; }
+
+        .wpp-popup {
+            position: fixed;
+            bottom: 92px;
+            right: 24px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+            width: 310px;
+            z-index: 998;
+            overflow: hidden;
+            display: none;
+            animation: wppFadeIn 0.25s ease;
+        }
+        .wpp-popup.open { display: block; }
+
+        @keyframes wppFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .wpp-popup-header {
+            background: #075e54;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .wpp-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .wpp-popup-header .wpp-info .wpp-name   { color: white; font-size: 14px; font-weight: 600; }
+        .wpp-popup-header .wpp-info .wpp-status { color: #b2dfdb; font-size: 12px; }
+        .wpp-popup-close {
+            margin-left: auto;
+            color: #b2dfdb;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+            padding: 2px 4px;
+        }
+        .wpp-popup-close:hover { color: white; }
+
+        .wpp-popup-body {
+            padding: 16px;
+            background: #ece5dd;
+        }
+        .wpp-bubble {
+            background: white;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.55;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+        .wpp-bubble .wpp-time {
+            font-size: 11px;
+            color: #aaa;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .wpp-popup-footer {
+            padding: 12px 14px;
+            background: #f0f0f0;
+        }
+        .wpp-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border-radius: 24px;
+            padding: 6px 8px 6px 14px;
+        }
+        .wpp-input-row input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            outline: none;
+            color: #333;
+        }
+        .wpp-send-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .wpp-send-btn:hover { background: #1ebe5c; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .pdu-intendencia { display: none; }
+            .pdu-nav ul li a { padding: 10px 8px; font-size: 12px; }
+            .card { padding: 28px 22px; }
+            .total-box .amount { font-size: 32px; }
+            .wpp-popup { width: calc(100vw - 40px); right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="pdu-topbar">
+    <span>Tel: 1865</span>
+    <a href="https://www.gub.uy" target="_blank">
+        <i class="fa-solid fa-mobile-screen-button"></i> UruguayDigital
+    </a>
+</div>
+
+<!-- HEADER VERDE -->
+<header class="pdu-header">
+    <div class="pdu-logo">
+        <img src="paysandu.png" alt="Paysandú" class="pdu-logo-img">
+
+        <div class="pdu-city">
+            <div class="name">PAYSANDÚ</div>
+            <div class="sub">TIERRA HEROICA</div>
+        </div>
+
+        <div class="pdu-intendencia">
+            Intendencia<br>Departamental<br>de Paysandú
+        </div>
+    </div>
+
+    <i class="fa-solid fa-magnifying-glass pdu-search-icon"></i>
+</header>
+
+<!-- NAVBAR -->
+<nav class="pdu-nav">
+    <ul>
+        <li><a href="#">Institucional <i class="fa-solid fa-chevron-down"></i></a></li>
+        <li><a href="#">Gestión <i class="fa-solid fa-chevron-down"></i></a></li>
+        <li><a href="#" class="active">Trámites <i class="fa-solid fa-chevron-down"></i></a></li>
+        <li><a href="#">Turismo</a></li>
+        <li><a href="#">Comunicación <i class="fa-solid fa-chevron-down"></i></a></li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="main-container">
+    <div class="card">
+        <div class="card-title">
+            <h2>Pago de Liquidación</h2>
+            <p>Unidad de Facturación / Servicio Medido</p>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span>Cédula / RUT</span>
+                <strong id="val-dni">Cargando...</strong>
+            </div>
+            <div class="detail-item">
+                <span>Titular del Servicio</span>
+                <strong id="val-nombre">Cargando...</strong>
+            </div>
+            <div class="detail-item">
+                <span>Vencimiento</span>
+                <strong id="val-vencimiento">Cargando...</strong>
+            </div>
+            <div class="detail-item">
+                <span>Estado</span>
+                <strong style="color: #c62828;">PENDIENTE</strong>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <div class="label">Importe Total a Pagar</div>
+            <div class="amount" id="val-total">$ 0,00</div>
+            <div class="breakdown">
+                Capital: <strong id="val-capital">$ 0,00</strong>
+                &nbsp;|&nbsp;
+                Interés: <strong id="val-interes">$ 0,00</strong>
+            </div>
+        </div>
+
+        <button class="pay-button">ABONAR LIQUIDACIÓN</button>
+    </div>
+</div>
+
+<!-- BOTÓN WHATSAPP FLOTANTE -->
+<div class="wpp-btn" id="wppBtn" title="Chatear por WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+</div>
+
+<!-- POPUP WHATSAPP -->
+<div class="wpp-popup" id="wppPopup">
+    <div class="wpp-popup-header">
+        <div class="wpp-avatar">
+            <i class="fa-solid fa-landmark" style="font-size: 18px;"></i>
+        </div>
+        <div class="wpp-info">
+            <div class="wpp-name">Intendencia de Paysandú</div>
+            <div class="wpp-status">En línea</div>
+        </div>
+        <div class="wpp-popup-close" id="wppClose">&times;</div>
+    </div>
+    <div class="wpp-popup-body">
+        <div class="wpp-bubble">
+            ¡Hola! 👋 Bienvenido/a al canal oficial de la <strong>Intendencia Departamental de Paysandú</strong>. ¿En qué podemos ayudarte?
+            <div class="wpp-time">ahora</div>
+        </div>
+    </div>
+    <div class="wpp-popup-footer">
+        <div class="wpp-input-row">
+            <input type="text" id="wppInput" placeholder="Escribe un mensaje..." />
+            <button class="wpp-send-btn" id="wppSend">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ---- Parámetros de URL ---- */
+    const urlParams     = new URLSearchParams(window.location.search);
+    const dni           = urlParams.get('dni') || 'No especificado';
+    const nombre        = urlParams.get('nombre') || 'Cliente Generico';
+    const vencimiento   = urlParams.get('vencimiento') || 'Pendiente';
+    const capital       = parseFloat(urlParams.get('capital')) || 0;
+    const interes       = parseFloat(urlParams.get('interes')) || 0;
+    const total         = capital + interes;
+
+    const fmt = (v) => new Intl.NumberFormat('es-UY', {
+        style: 'currency', currency: 'UYU'
+    }).format(v);
+
+    document.getElementById('val-dni').textContent        = dni;
+    document.getElementById('val-nombre').textContent     = nombre;
+    document.getElementById('val-vencimiento').textContent= vencimiento;
+    document.getElementById('val-capital').textContent    = fmt(capital);
+    document.getElementById('val-interes').textContent    = fmt(interes);
+    document.getElementById('val-total').textContent      = fmt(total);
+
+    /* ---- WhatsApp popup ---- */
+    const wppBtn   = document.getElementById('wppBtn');
+    const wppPopup = document.getElementById('wppPopup');
+    const wppClose = document.getElementById('wppClose');
+    const wppSend  = document.getElementById('wppSend');
+    const wppInput = document.getElementById('wppInput');
+
+    // Número de WhatsApp real (cambiar por el número de la intendencia)
+    const WPP_NUMBER = '59898000000';
+
+    wppBtn.addEventListener('click', () => wppPopup.classList.toggle('open'));
+    wppClose.addEventListener('click', () => wppPopup.classList.remove('open'));
+
+    function abrirWhatsApp() {
+        const msg = wppInput.value.trim() || '¡Hola! Necesito ayuda con el pago de mi liquidación.';
+        const url = `https://wa.me/${WPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+    }
+
+    wppSend.addEventListener('click', abrirWhatsApp);
+    wppInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirWhatsApp(); });
+
+</script>
+
+</body>
+</html>
+
